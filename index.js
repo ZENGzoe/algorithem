@@ -78,3 +78,47 @@ var greedyAlgorithem_bag = {
     }
 }  
 greedyAlgorithem_bag.init();
+
+//分治算法之求数组最大子数组
+function devideAndConquer_array(arr , lowIdx , highIdx){
+    function countCrossMidSum(arr , low , high , mid){
+        var leftSum = arr[mid],
+            rightSum = arr[mid+1],
+            left = mid,
+            right = mid + 1;
+        
+        for(var i = mid , sum = 0 ; i >= low ; i--){
+            sum += arr[i];
+            if(sum > leftSum){
+                leftSum = sum;
+                left = i;
+            }
+        }
+        for(var i = mid+1 , sum = 0 ; i <= high ; i++){
+            sum += arr[i];
+            if(sum > rightSum){
+                rightSum = sum;
+                right = i;
+            }
+        }
+        return [leftSum + rightSum , left , right];
+    };
+    if(lowIdx == highIdx){
+        return [arr[lowIdx] , lowIdx , highIdx];
+    }
+    var mid = parseInt((lowIdx + highIdx) / 2);
+    var result1 = devideAndConquer_array(arr , lowIdx , mid);
+    var result2 = devideAndConquer_array(arr , mid+1 , highIdx);
+    var result3 = countCrossMidSum(arr , lowIdx , highIdx , mid);
+
+    if(result1[0] > result2[0] && result1[0] > result3[0]){
+        return result1;
+    }else if(result1[0] > result2[0]){
+        return result3;
+    }else{
+        return result3[0] > result2[0] ? result3 : result2;
+    }
+}
+var arr1 = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7];
+var result1 = devideAndConquer_array( arr1 , 0 , arr1.length - 1);
+console.log(result1);
