@@ -122,3 +122,66 @@ function devideAndConquer_array(arr , lowIdx , highIdx){
 var arr1 = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7];
 var result1 = devideAndConquer_array( arr1 , 0 , arr1.length - 1);
 console.log(result1);
+
+//背包问题
+var dynamicProgramming_bag = {
+    init : function(){
+        var weights = [2,3,4],
+            val = [3,4,5],
+            num = 3,
+            capacity = 5;   //背包承重
+        
+        console.log(this.knapSack(weights , val , num , capacity))
+    },
+    knapSack : function(weights , val , num , capacity){
+        var T = [];
+        for(var i = 0 ; i < num ; i++){
+            T[i] = [];
+            for(var j = 0 ; j <= capacity ; j++){
+                //承重为0，装不下任何物品
+                if(j == 0){
+                    T[i][j] = 0;
+                    continue;
+                }
+                //装不下当下物件
+                if(j < weights[i]){
+                    if(i == 0){
+                        T[i][j] = 0;
+                    }else{
+                        T[i][j] = T[i-1][j];
+                    }
+                    continue;
+                }
+                //装得下当下物件
+                if(i == 0){
+                    T[i][j] = val[i];
+                }else{
+                    T[i][j] = Math.max(val[i] + T[i-1][j-weights[i]] , T[i-1][j]);
+                }
+            }
+        }
+
+        this.findValue(weights , val , num , capacity , T);
+
+        return T;
+    }, 
+    findValue : function(weights , val , num , capacity , T){
+        var i = num -1 , j = capacity;
+
+        while(i > 0 && j > 0){
+            if(T[i][j] !== T[i-1][j]){
+                console.log(`输出物品${i}，重量：${weights[i]}，价值：${val[i]}`)
+                j = j - weights[i];
+                i--;
+            }else{
+                i--;
+            }
+        }
+        if(i == 0){
+            if(T[i][j] !== 0){
+                console.log(`输出物品${i}，重量：${weights[i]}，价值：${val[i]}`)
+            }
+        }
+    }
+}; 
+dynamicProgramming_bag.init();
