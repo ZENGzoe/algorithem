@@ -123,7 +123,7 @@ var arr1 = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7];
 var result1 = devideAndConquer_array( arr1 , 0 , arr1.length - 1);
 console.log(result1);
 
-//背包问题
+//动态规划之背包问题
 var dynamicProgramming_bag = {
     init : function(){
         var weights = [2,3,4],
@@ -185,3 +185,85 @@ var dynamicProgramming_bag = {
     }
 }; 
 dynamicProgramming_bag.init();
+
+//回溯法之查找矩阵中的路径
+var backtracking_matrix = {
+    init :function(){
+        var arr = ['a', 'b', 't', 'g', 'c', 'f', 'c', 's', 'j', 'd', 'e', 'h'];
+        var str = 'bfce';
+
+        console.log(this.hasPath(arr , 4 , 3 , str));
+    },
+    hasPath : function(matrix , cols , rows , str){
+        var visited = [];
+        var pathLen = 0;
+        for(var i = 0 ; i < cols * rows ; i++){
+            visited[i] = false;
+        }
+        for(var i = 0 ; i < rows ; i++){
+            for(var j = 0 ; j < cols ; j++){
+                if(this.hasPathCore(matrix , cols , rows , i , j , str , visited , pathLen)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+    hasPathCore : function(matrix , cols , rows , i , j , str , visited , pathLen){
+        if(pathLen == str.length) return true;
+
+        var hasPath = false;
+        if(i >= 0 && i < rows && j >= 0 && j < cols && matrix[i * cols + j] == str[pathLen] && !visited[i * cols + j]){
+            visited[i * cols + j] = true;
+            pathLen++;
+            hasPath = this.hasPathCore(matrix , cols , rows , i - 1 , j , str , visited , pathLen) || this.hasPathCore(matrix , cols , rows , i  , j - 1 , str , visited , pathLen) || this.hasPathCore(matrix , cols , rows , i + 1 , j , str , visited , pathLen) || this.hasPathCore(matrix , cols , rows , i  , j + 1, str , visited , pathLen);
+            if(!hasPath){
+                pathLen--;
+                visited[i * cols + j] = false;
+            }
+        }
+        return hasPath;
+    }
+}; 
+backtracking_matrix.init();
+
+//回溯法之机器人的运动范围
+var backtracking_robert = {
+    init : function(){
+        console.log('机器人的可运动格子：' , this.movingCount(18 , 5 ,5));
+    },
+    movingCount : function(threshold , rows , cols){
+        var visited = [];
+        for(var i = 0 ; i < rows * cols ; i++){
+            visited[i] = false;
+        }
+        return this.countingNum(threshold , rows , cols , 0 , 0 , visited);
+    },
+    countingNum : function(threshold , rows , cols , i , j , visited){
+        var count = 0;
+        if(this.checkCanMoving(threshold , i , j , rows , cols , visited)){
+            visited[i * cols + j] = true;
+            count = 1 + this.countingNum(threshold , rows , cols ,i - 1 , j ,  visited)
+                      + this.countingNum(threshold , rows , cols ,i , j - 1 , visited)
+                      + this.countingNum(threshold , rows , cols ,i + 1 , j , visited)
+                      + this.countingNum(threshold , rows , cols ,i , j + 1 , visited);
+        }
+        return count;
+    },
+    checkCanMoving(threshold , i , j, rows , cols , visited){
+        if(i >= 0 && i < rows && j >= 0 && j < cols && !visited[i * cols + j] && this.getDigitSum(i) + this.getDigitSum(j) <= threshold){
+            return true;
+        }
+        return false;
+    },
+    getDigitSum(num){
+        var sum = 0;
+        while(num > 0){
+            sum += num % 10;
+            num = Math.floor(num / 10);
+        }
+        return sum;
+    }
+}  
+backtracking_robert.init();
+
