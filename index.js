@@ -267,3 +267,70 @@ var backtracking_robert = {
 }  
 backtracking_robert.init();
 
+
+function bubleSort(arr){
+    var len = arr.length;
+    for(var i = len ; i >= 2 ; i--){
+        for(var j = 0 ; j < i - 1 ; j++){
+            if(arr[j] > arr[j + 1]){
+                [arr[j] , arr[j+1]] = [arr[j+1] , arr[j]];
+            }
+        }
+    }
+    return arr;
+}
+console.log('冒泡排序：',bubleSort([39,24,25,6,-2,6,-32,0,4]))
+
+function selectSort(arr){
+    var len = arr.length;
+    for(var i = 0 ; i < len - 1 ; i++){
+        for(var j = i ; j < len ; j++){
+            if(arr[i] > arr[j]){
+                [arr[i] , arr[j]] = [arr[j] , arr[i]];
+            }
+        }
+    }
+    return arr;
+}
+console.log('选择排序：', selectSort([39,24,25,6,-2,6,-32,0,4]));
+
+function insetSort(arr){
+    for(var i = 1 ; i < arr.length ; i++){  //假定arr[0]是排好序的
+        for(var j = i ; j > 0 ; j--){
+            if(arr[j] < arr[j - 1]){
+                [arr[j],arr[j-1]] = [arr[j-1] , arr[j]];
+            }else{
+                break;
+            }
+        }
+    }
+    return arr;
+}
+console.log('插入排序：' , insetSort([39,24,25,6,-2,6,-32,0,4]));
+
+function quickSort(arr){
+    //退出递归
+    if(arr.length <= 1) return arr;
+
+    var left = [],
+        right = [],
+        current = arr.splice(0,1);
+    
+    for(var i = 0 ; i < arr.length ; i++){
+        if(arr[i] < current){
+            left.push(arr[i])
+        }else{
+            right.push(arr[i]);
+        }
+    }
+    return quickSort(left).concat(current , quickSort(right));
+}
+console.log('快速排序：',quickSort([39,24,25,6,-2,6,-32,0,4]));
+
+function fibonacci(n){
+    if(n == 1 || n ==2){
+        return 1;
+    }
+    return fibonacci(n-1) + fibonacci(n-2);
+}
+console.log('斐波那契数列：',fibonacci(10));
